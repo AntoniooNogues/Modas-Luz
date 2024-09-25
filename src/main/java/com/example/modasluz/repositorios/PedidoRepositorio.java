@@ -1,11 +1,12 @@
 package com.example.modasluz.repositorios;
 
+import com.example.modasluz.modelos.Pedido;
 import com.example.modasluz.modelos.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PedidoRepositorio extends JpaRepository<Producto, Integer> {
+public interface PedidoRepositorio extends JpaRepository<Pedido, Integer> {
 
 
 }
