@@ -24,17 +24,17 @@ public class Pedido {
 
     // Cuando la tabla es ManyToOne, se debe hacer la inversa por lo general en la tabla 1 "OneToMany"
     @ManyToOne
-    @JoinColumn(name = "id_cliente")
+    @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "id_tipo_pago")
+    @JoinColumn(name = "id_tipo_pago", nullable = false)
     private TipoPago tipo_pago;
 
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
 
-    @Column(name = "codigo")
+    @Column(name = "codigo", nullable = false)
     private Integer codigo;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

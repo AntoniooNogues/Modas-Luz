@@ -1,5 +1,7 @@
 package com.example.modasluz.modelos;
 
+import com.example.modasluz.enums.EstatusPago;
+import com.example.modasluz.enums.MetodoPago;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,13 +24,15 @@ public class TipoPago {
     private Integer id;
 
     @Column(name = "metodo_pago", nullable = false)
-    private Integer metodo_pago;
+    @Enumerated(EnumType.ORDINAL)
+    private MetodoPago metodo_pago;
 
     @Column(name = "detalles_efectivo")
     private String detalles_efectivo;
 
-    @Column(name = "estatus_pago")
-    private Integer estatus_pago;
+    @Column(name = "estatus_pago", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private EstatusPago estatus_pago;
 
     @Column(name = "referencia_pago")
     private String referencia_pago;
