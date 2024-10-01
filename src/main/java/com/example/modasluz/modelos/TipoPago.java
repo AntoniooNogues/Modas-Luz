@@ -9,14 +9,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "tipo_pago", schema = "modasLuz")
+@Table(name = "tipo_pago", schema = "modasluz", catalog = "postgres")
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-
 public class TipoPago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,8 +36,7 @@ public class TipoPago {
     @Column(name = "referencia_pago")
     private String referencia_pago;
 
-    @OneToMany(mappedBy = "tipo_pago", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Pedido> pedidos = new HashSet<>();
+
 
 
 }

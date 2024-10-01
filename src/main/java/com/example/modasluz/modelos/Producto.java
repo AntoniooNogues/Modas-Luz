@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "producto", schema = "modasLuz")
+@Table(name = "producto", schema = "modasluz", catalog = "postgres")
 @Getter
 @Setter
 @ToString
@@ -19,7 +19,7 @@ public class Producto {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_producto", nullable = false)
     private TipoProducto tipo_producto;
 
@@ -29,12 +29,5 @@ public class Producto {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<TipoProductoPrecio> tipo_producto_precio = new HashSet<>();
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Stock> stock = new HashSet<>();
-
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Catalogo> catalogo = new HashSet<>();
 }

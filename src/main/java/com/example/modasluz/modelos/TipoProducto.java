@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "tipo_producto", schema = "modasLuz")
+@Table(name = "tipo_producto", schema = "modasluz", catalog = "postgres")
 @Getter
 @Setter
 @ToString
@@ -23,6 +23,5 @@ public class TipoProducto {
     @Column(name = "nombre")
     private String nombre;
 
-    @OneToMany(mappedBy = "tipo_producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Producto> productos = new HashSet<>();
+
 }

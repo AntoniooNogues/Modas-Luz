@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "registro_venta", schema = "modasLuz")
+@Table(name = "registro_venta", schema = "modasluz", catalog = "postgres")
 @Getter
 @Setter
 @ToString
@@ -21,13 +21,12 @@ public class RegistroVenta {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    // Cuando la tabla es ManyToOne, se debe hacer la inversa por lo general en la tabla 1 "OneToMany"
-    @ManyToOne
-    @JoinColumn(name = "id_pedido", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_pedido", referencedColumnName = "id", nullable = false)
     private Pedido pedido;
 
-    @ManyToOne
-    @JoinColumn(name = "id_producto", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_producto", referencedColumnName = "id", nullable = false)
     private Producto producto;
 
     @Column(name = "cantidad", nullable = false)
