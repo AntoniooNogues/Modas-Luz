@@ -19,7 +19,7 @@ public class Catalogo {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_producto", nullable = false)
     private Producto producto;
 

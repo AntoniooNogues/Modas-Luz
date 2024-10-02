@@ -1,6 +1,7 @@
 package com.example.modasluz.modelos;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +20,7 @@ public class Producto {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_tipo_producto", nullable = false)
     private TipoProducto tipo_producto;
 

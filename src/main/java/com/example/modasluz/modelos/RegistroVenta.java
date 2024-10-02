@@ -2,6 +2,7 @@ package com.example.modasluz.modelos;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,11 +22,11 @@ public class RegistroVenta {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_pedido", referencedColumnName = "id", nullable = false)
     private Pedido pedido;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_producto", referencedColumnName = "id", nullable = false)
     private Producto producto;
 
