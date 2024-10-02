@@ -20,7 +20,7 @@ public class RegistroVentaService {
      * @return
      */
 
-    public RegistroVenta registroVenta (RegistroVenta registroVenta){
+    public RegistroVenta guardar (RegistroVenta registroVenta){
         return registroVentaRepositorio.save(registroVenta);
     }
 
