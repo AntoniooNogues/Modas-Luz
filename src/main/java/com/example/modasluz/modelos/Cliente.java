@@ -27,7 +27,7 @@ public class Cliente {
     private String apellidos;
 
     @Column(name = "dni", nullable = false)
-    private Integer dni;
+    private String dni;
 
     @Column(name = "direccion", nullable = false)
     private String direccion;

@@ -34,7 +34,7 @@ public class Pedido {
     private LocalDate fecha;
 
     @Column(name = "codigo", nullable = false)
-    private Integer codigo;
+    private String codigo;
 
 
 }
