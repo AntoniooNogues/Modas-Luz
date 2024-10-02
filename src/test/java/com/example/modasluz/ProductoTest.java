@@ -3,13 +3,12 @@ package com.example.modasluz;
 import com.example.modasluz.modelos.Producto;
 import com.example.modasluz.modelos.TipoProducto;
 import com.example.modasluz.services.ProductoService;
-import com.example.modasluz.services.TipoProductoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ProductosTest {
+public class ProductoTest {
 
 
     @Autowired
