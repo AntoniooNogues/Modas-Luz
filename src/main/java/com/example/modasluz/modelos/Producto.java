@@ -22,7 +22,7 @@ public class Producto {
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_producto", nullable = false)
-    private TipoProducto tipo_producto;
+    private TipoProducto tipoProducto;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;

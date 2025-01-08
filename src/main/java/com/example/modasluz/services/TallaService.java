@@ -1,5 +1,7 @@
 package com.example.modasluz.services;
 
+import com.example.modasluz.dto.TallaDTO;
+import com.example.modasluz.mappers.TallaMapper;
 import com.example.modasluz.modelos.Talla;
 import com.example.modasluz.repositorios.TallaRepositorio;
 import lombok.AllArgsConstructor;
@@ -13,14 +15,16 @@ public class TallaService {
 
     private TallaRepositorio tallaRepositorio;
 
+    private TallaMapper tallaMapper;
+
     /**
      * Guarda una talla o lo modifica si ya existe
      * @param talla
      * @return
      */
 
-    public Talla guardar (Talla talla){
-        return tallaRepositorio.save(talla);
+    public Talla guardar (TallaDTO talla){
+        return tallaRepositorio.save(tallaMapper.toEntity(talla));
     }
 
     /**
@@ -35,8 +39,8 @@ public class TallaService {
      * Obtiene todos los productos
      * @return
      */
-    public List<Talla> getAll(){
-        return tallaRepositorio.findAll();
+    public List<TallaDTO> getAll(){
+        return tallaMapper.toDTO(tallaRepositorio.findAll());
     }
 
     /**
@@ -44,8 +48,8 @@ public class TallaService {
      * @param id
      * @return
      */
-    public Talla getById(Integer id){
-        return tallaRepositorio.findById(id).orElse(null);
+    public TallaDTO getById(Integer id){
+        return tallaMapper.toDTO(tallaRepositorio.findById(id).orElse(null));
     }
 
 }

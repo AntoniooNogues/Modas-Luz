@@ -9,8 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistroVentaDTO {
-    private Integer cantidd;
-    private Double precioVenta;
-    private Long idPedido;
-    private Long idProducto;
+    private Integer cantidad;
+    private Double precio_venta;
+    private ProductoDTO productoDTO;
 }

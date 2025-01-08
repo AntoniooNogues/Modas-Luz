@@ -1,5 +1,4 @@
 package com.example.modasluz.dto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CatalogoDTO {
 
-    private Integer idProducto;
+    private ProductoDTO producto;
+    private TallaDTO talla;
+    private ColorDTO color;
+    private Integer cantidad;
     private Double precio;
-
-    
 }

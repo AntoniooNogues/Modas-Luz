@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TipoPagoDTO {
 
-    private MetodoPago metodoPago;
-    private String detallesEfectivo;
-    private EstatusPago estatusPago;
-    private String referenciaPago;
+    //Enumerado tipo numero a string
+    private MetodoPago tipo_metodo_pago;
+    //Enumerado tipo numero a string
+    private EstatusPago tipo_estatus_pago;
+
+    private String referencia_pago;
 
 }

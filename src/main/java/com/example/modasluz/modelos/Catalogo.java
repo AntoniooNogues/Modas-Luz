@@ -2,9 +2,6 @@ package com.example.modasluz.modelos;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "catalogo", schema = "modasluz", catalog = "postgres")
 @Getter
@@ -20,8 +17,19 @@ public class Catalogo {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_producto", nullable = false)
+    @JoinColumn(name = "id_producto", referencedColumnName = "id", nullable = false)
     private Producto producto;
+
+    @ManyToOne
+    @JoinColumn(name = "id_talla", referencedColumnName = "id",  nullable = false)
+    private Talla talla;
+
+    @ManyToOne
+    @JoinColumn(name = "id_color", referencedColumnName = "id", nullable = false)
+    private Color color;
+
+    @Column(name = "cantidad", nullable = false)
+    private Integer cantidad;
 
     @Column(name = "precio", nullable = false)
     private Double precio;

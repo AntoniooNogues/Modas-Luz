@@ -1,5 +1,7 @@
 package com.example.modasluz.services;
 
+import com.example.modasluz.dto.ColorDTO;
+import com.example.modasluz.mappers.ColorMapper;
 import com.example.modasluz.modelos.Color;
 import com.example.modasluz.repositorios.ColorRepositorio;
 import lombok.AllArgsConstructor;
@@ -12,6 +14,7 @@ import java.util.List;
 public class ColorService {
 
     private ColorRepositorio colorRepositorio;
+    private ColorMapper colorMapper;
 
     /**
      * Guarda un color o lo modifica si ya existe
@@ -19,8 +22,8 @@ public class ColorService {
      * @return
      */
 
-    public Color guardar (Color color){
-        return colorRepositorio.save(color);
+    public Color guardar (ColorDTO color){
+        return colorRepositorio.save(colorMapper.toEntity(color));
     }
 
     /**
@@ -35,8 +38,8 @@ public class ColorService {
      * Obtiene todos los productos
      * @return
      */
-    public List<Color> getAll(){
-        return colorRepositorio.findAll();
+    public List<ColorDTO> getAll(){
+        return colorMapper.toDTO(colorRepositorio.findAll());
     }
 
     /**
@@ -44,8 +47,8 @@ public class ColorService {
      * @param id
      * @return
      */
-    public Color getById(Integer id){
-        return colorRepositorio.findById(id).orElse(null);
+    public ColorDTO getById(Integer id){
+        return colorMapper.toDTO(colorRepositorio.findById(id).orElse(null));
     }
 
 }

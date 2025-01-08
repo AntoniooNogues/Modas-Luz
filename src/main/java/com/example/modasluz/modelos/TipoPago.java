@@ -22,16 +22,13 @@ public class TipoPago {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "metodo_pago", nullable = false)
+    @Column(name = "tipo_metodo_pago", nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    private MetodoPago metodo_pago;
+    private MetodoPago tipo_metodo_pago;
 
-    @Column(name = "detalles_efectivo")
-    private String detalles_efectivo;
-
-    @Column(name = "estatus_pago", nullable = false)
+    @Column(name = "tipo_estatus_pago", nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    private EstatusPago estatus_pago;
+    private EstatusPago tipo_estatus_pago;
 
     @Column(name = "referencia_pago")
     private String referencia_pago;

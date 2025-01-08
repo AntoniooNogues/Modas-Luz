@@ -1,11 +1,14 @@
 package com.example.modasluz.services;
 
+import com.example.modasluz.dto.ProductoDTO;
+import com.example.modasluz.mappers.ProductoMapper;
 import com.example.modasluz.modelos.Producto;
+import com.example.modasluz.modelos.TipoProducto;
 import com.example.modasluz.repositorios.ProductoRepositorio;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,6 +16,8 @@ import java.util.List;
 public class ProductoService {
 
     private ProductoRepositorio productoRepositorio;
+    private ProductoMapper productoMapper;
+    private TipoProductoService tipoProductoService;
 
     /**
      * Guarda un producto o lo modifica si ya existe
@@ -20,8 +25,8 @@ public class ProductoService {
      * @return
      */
 
-    public Producto guardar (Producto producto){
-        return productoRepositorio.save(producto);
+    public Producto guardar (ProductoDTO producto){
+        return productoRepositorio.save(productoMapper.toEntity(producto));
     }
 
     /**
@@ -36,8 +41,8 @@ public class ProductoService {
      * Obtiene todos los productos
      * @return
      */
-    public List<Producto> getAll(){
-        return productoRepositorio.findAll();
+    public List<ProductoDTO> getAll(){
+        return productoMapper.toDTO(productoRepositorio.findAll());
     }
 
     /**
@@ -45,7 +50,11 @@ public class ProductoService {
      * @param id
      * @return
      */
-    public Producto getById(Integer id){
+    public ProductoDTO getById(Integer id){
+        return productoMapper.toDTO(productoRepositorio.findById(id).orElse(null));
+    }
+
+    public Producto getByIdNormal(Integer id){
         return productoRepositorio.findById(id).orElse(null);
     }
 

@@ -2,10 +2,10 @@ package com.example.modasluz.modelos;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.ManyToAny;
+
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -24,7 +24,7 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(name = "id_cliente",referencedColumnName = "id", nullable = false)
-    private Cliente cliente;
+    private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_pago", referencedColumnName = "id", nullable = false)
@@ -36,5 +36,12 @@ public class Pedido {
     @Column(name = "codigo", nullable = false)
     private String codigo;
 
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private Set<RegistroVenta> registros = new HashSet<>();
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }

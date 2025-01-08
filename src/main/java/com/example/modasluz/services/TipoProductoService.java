@@ -1,5 +1,7 @@
 package com.example.modasluz.services;
 
+import com.example.modasluz.dto.TipoProductoDTO;
+import com.example.modasluz.mappers.TipoProductoMapper;
 import com.example.modasluz.modelos.TipoProducto;
 import com.example.modasluz.repositorios.TipoProductoRepositorio;
 import lombok.AllArgsConstructor;
@@ -13,14 +15,16 @@ public class TipoProductoService {
 
     private TipoProductoRepositorio tipoProductoRepositorio;
 
+    private TipoProductoMapper tipoProductoMapper;
+
     /**
      * Guarda un producto o lo modifica si ya existe
-     * @param tipoProducto
+     * @param tipoProductoDTO
      * @return
      */
 
-    public TipoProducto guardar (TipoProducto tipoProducto){
-        return tipoProductoRepositorio.save(tipoProducto);
+    public TipoProducto guardar (TipoProductoDTO tipoProductoDTO){
+        return tipoProductoRepositorio.save(tipoProductoMapper.toEntity(tipoProductoDTO));
     }
 
     /**
@@ -35,8 +39,8 @@ public class TipoProductoService {
      * Obtiene todos los productos
      * @return
      */
-    public List<TipoProducto> getAll(){
-        return tipoProductoRepositorio.findAll();
+    public List<TipoProductoDTO> getAll(){
+        return tipoProductoMapper.toDTO(tipoProductoRepositorio.findAll());
     }
 
     /**
@@ -44,8 +48,8 @@ public class TipoProductoService {
      * @param id
      * @return
      */
-    public TipoProducto getById(Integer id){
-        return tipoProductoRepositorio.findById(id).orElse(null);
+    public TipoProductoDTO getById(Integer id){
+        return tipoProductoMapper.toDTO(tipoProductoRepositorio.findById(id).get());
     }
 
 }

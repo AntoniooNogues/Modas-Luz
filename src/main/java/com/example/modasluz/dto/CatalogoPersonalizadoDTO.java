@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TipoProductoPrecioDTO {
+public class CatalogoPersonalizadoDTO {
 
-    private Long idProducto;
-    private Long idTalla;
-    private Long idColor;
-    private Double precio;
+    private Integer id_producto;
+    private String talla;
+    private Integer cantidad;
+
 }

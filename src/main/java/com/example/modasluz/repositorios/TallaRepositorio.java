@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TallaRepositorio extends JpaRepository<Talla, Integer> {
 
+    Talla findByTipo(String tipo);
+
 
 }

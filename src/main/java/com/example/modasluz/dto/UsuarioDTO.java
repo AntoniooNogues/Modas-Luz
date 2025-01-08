@@ -1,5 +1,4 @@
 package com.example.modasluz.dto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,12 +6,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class ProductoDTO {
-
-    private TipoProductoDTO tipoProducto;
+public class UsuarioDTO {
     private String nombre;
-    private String descripcion;
-    private String imagen;
-
+    private String apellidos;
+    private String dni;
+    private String correo_electronico;
+    private String direccion;
+    private Integer codigo_postal;
 }
