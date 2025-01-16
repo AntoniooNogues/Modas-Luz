@@ -8,8 +8,11 @@ import com.example.modasluz.modelos.Usuario;
 import com.example.modasluz.repositorios.UsuarioRepositorio;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -25,8 +28,14 @@ public class UsuarioService {
         return usuarioRepositorio.save(usuarioMapper.toEntity(cliente));
     }
 
-    public void eliminar (Integer id){
-        usuarioRepositorio.deleteById(id);
+    public String eliminar (Integer id) throws Exception{
+        Optional<Usuario> usuario = usuarioRepositorio.findById(id);
+        if (!usuario.isPresent()){
+            throw new Exception("No se ha encontrado un cliente con el id ingresado");
+        }else{
+            usuarioRepositorio.deleteById(id);
+            return "Cliente eliminado correctamente";
+        }
     }
 
     public List<UsuarioDTO> getAll(){
@@ -45,14 +54,20 @@ public class UsuarioService {
         return usuarioRepositorio.save(usuarioMapper.toEntity(usuarioDTO));
     }
 
-    public UsuarioDTOPedidos getPedidosDeCliente(Integer clienteId) {
-        UsuarioDTOPedidos cliente = usuarioMapper.toDTO(usuarioRepositorio.findById(clienteId).orElse(null));
-        Set<PedidoDTO> pedidosDTO = clientePedidoService.getPedidosByClienteId(clienteId);
-        cliente.setPedidosDTO(pedidosDTO);
-        return cliente;
-    }
-
-    public Usuario buscarUsuarioPorNombre(String username) {
-        return usuarioRepositorio.findTopByUsername(username).orElse(null);
+    @Transactional
+    public UsuarioDTOPedidos getPedidosDeCliente(Integer clienteId) throws Exception {
+        Optional<Usuario> cliente = usuarioRepositorio.findById(clienteId);
+        if (!cliente.isPresent()){
+            throw new Exception("No se ha encontrado un cliente con el id ingresado");
+        }else{
+            UsuarioDTOPedidos clienteDTO = usuarioMapper.toDTO(cliente);
+            Set<PedidoDTO> pedidosDTO = clientePedidoService.getPedidosByClienteId(clienteId);
+            if (pedidosDTO.isEmpty()){
+                throw new Exception("El cliente no tiene pedidos asociados");
+            }else{
+                clienteDTO.setPedidosDTO(pedidosDTO);
+                return clienteDTO;
+            }
+        }
     }
 }

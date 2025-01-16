@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
@@ -17,11 +18,11 @@ public interface UsuarioMapper {
 
     UsuarioDTOPedidos toDTO(Usuario usuario);
 
+    UsuarioDTOPedidos toDTO(Optional<Usuario> usuario);
+
     List<UsuarioDTO> toDTO(List<Usuario> usuarios);
     List<Usuario> toEntity(List<UsuarioDTO> usuarioDTOS);
 
-    @Mapping(source = "pedidos", target = "pedidosDTO")
-    UsuarioDTOPedidos toDTOPedidos(Usuario usuario);
 
     @Mapping(source = "tipo_pago", target = "tipo_pago")
     PedidoDTO toPedidoDTO(Pedido pedido);

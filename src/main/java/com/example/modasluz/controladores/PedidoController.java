@@ -14,7 +14,7 @@ public class PedidoController {
 
 
 @PostMapping()
-  public String guardar(@RequestBody PedidoPersonalizadoDTO pedidoDTO) {
-       return pedidoService.crearPedidoPersonalizado(pedidoDTO);
+  public String guardar(@RequestBody PedidoPersonalizadoDTO pedidoDTO)throws Exception {
+        return pedidoService.crearPedidoPersonalizado(pedidoDTO);
     }
 }

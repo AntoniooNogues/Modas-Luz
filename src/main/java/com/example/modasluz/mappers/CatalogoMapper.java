@@ -3,9 +3,11 @@ import com.example.modasluz.dto.*;
 import com.example.modasluz.modelos.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 @Mapper
 public interface CatalogoMapper {
 

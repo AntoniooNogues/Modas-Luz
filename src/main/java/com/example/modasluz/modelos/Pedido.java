@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "pedido", schema = "modasluz", catalog = "postgres")
+@Table(name = "pedido", schema = "modasluz")
 @Getter
 @Setter
 @ToString
@@ -24,7 +24,7 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(name = "id_cliente",referencedColumnName = "id", nullable = false)
-    private Usuario usuario;
+    private Usuario cliente;
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_pago", referencedColumnName = "id", nullable = false)
@@ -35,13 +35,5 @@ public class Pedido {
 
     @Column(name = "codigo", nullable = false)
     private String codigo;
-
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-    private Set<RegistroVenta> registros = new HashSet<>();
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
 }

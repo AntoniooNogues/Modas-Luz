@@ -1,5 +1,6 @@
 package com.example.modasluz.controladores;
 
+import com.example.modasluz.dto.CatalogoDTO;
 import com.example.modasluz.services.CatalogoService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +14,12 @@ public class CatalogoController {
 
 
     @GetMapping("/{id}/{talla}")
-    public Object consultarDisponibilidad(@PathVariable  Integer id,@PathVariable String talla) {
+    public CatalogoDTO consultarDisponibilidad(@PathVariable  Integer id, @PathVariable String talla) throws Exception {
         return catalogoService.consultarDisponibilidad(id, talla);
     }
 
     @GetMapping("/consultar")
-    public Object disponibilidad(@RequestParam Integer id, @RequestParam String talla) {
+    public CatalogoDTO disponibilidad(@RequestParam Integer id, @RequestParam String talla) throws Exception {
         return catalogoService.consultarDisponibilidad(id, talla);
     }
 }

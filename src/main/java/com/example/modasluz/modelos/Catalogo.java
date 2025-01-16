@@ -3,7 +3,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "catalogo", schema = "modasluz", catalog = "postgres")
+@Table(name = "catalogo", schema = "modasluz")
 @Getter
 @Setter
 @ToString

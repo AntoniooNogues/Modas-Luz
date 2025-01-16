@@ -18,7 +18,7 @@ public class StockModificarController {
 
 
 @PostMapping("/modificar")
-  public Object guardar(@RequestBody CatalogoPersonalizadoDTO catalogoPersonalizadoDTO) {
+  public CatalogoDTO guardar(@RequestBody CatalogoPersonalizadoDTO catalogoPersonalizadoDTO) throws Exception {
        return catalogoService.modificarStock(catalogoPersonalizadoDTO);
     }
 }

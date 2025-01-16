@@ -31,10 +31,6 @@ public class RegistroVentaService {
      * @return
      */
 
-    public RegistroVenta guardar(RegistroVenta registroVenta) {
-        registroVenta = calcularPrecioVenta(registroVenta);
-        return registroVentaRepositorio.save(registroVenta);
-    }
 
     /**
      * Elimina un producto gracias a su id

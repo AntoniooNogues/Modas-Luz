@@ -4,6 +4,7 @@ import com.example.modasluz.dto.PedidoPersonalizadoDTO;
 import com.example.modasluz.modelos.Pedido;
 import com.example.modasluz.modelos.RegistroVenta;
 import com.example.modasluz.repositorios.PedidoRepositorio;
+import com.example.modasluz.repositorios.RegistroVentaRepositorio;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -25,6 +26,8 @@ public class PedidoService {
     private PedidoRepositorio pedidoRepositorio;
     @Autowired
     private ClientePedidoService clientePedidoService;
+    @Autowired
+    private RegistroVentaRepositorio registroVentaRepositorio;
 
 
     public Pedido guardar (Pedido pedido){
@@ -39,18 +42,15 @@ public class PedidoService {
         return pedidoRepositorio.findAll();
     }
 
-    public Pedido getById(Integer id){
-        return pedidoRepositorio.findById(id).orElse(null);
-    }
 
-    public String crearPedidoPersonalizado(PedidoPersonalizadoDTO pedidoPersonalizadoDTO){
+    public String crearPedidoPersonalizado(PedidoPersonalizadoDTO pedidoPersonalizadoDTO) throws Exception{
         try {
             Pedido pedido = new Pedido();
-            pedido.setUsuario(usuarioService.getByIdCliente(pedidoPersonalizadoDTO.getId_cliente()));
+            pedido.setCliente(usuarioService.getByIdCliente(pedidoPersonalizadoDTO.getId_cliente()));
             pedido.setTipo_pago(tipoPagoService.getById(pedidoPersonalizadoDTO.getId_tipo_pago()));
             pedido.setFecha(pedidoPersonalizadoDTO.getFecha());
             pedido.setCodigo("PED" + clientePedidoService.obtenerUltimoPedidoId());
-            guardar(pedido);
+            pedido = guardar(pedido);
 
             for (int i = 0; i < pedidoPersonalizadoDTO.getProductos().size(); i++) {
                 RegistroVenta registro = new RegistroVenta();
@@ -59,14 +59,11 @@ public class PedidoService {
                 registro.setCantidad(pedidoPersonalizadoDTO.getCantidades().get(i));
                 registro.setPedido(pedido);
                 registro = registroVentaService.calcularPrecioVenta(registro);
-                registroVentaService.guardar(registro);
+                registroVentaRepositorio.save(registro);
             }
-            pedido.setCodigo("PED" + pedido.getId());
-            guardar(pedido);
             return "Pedido creado correctamente";
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error a la hora de crear un pedido";
+            throw new Exception("Error a la hora de crear un pedido");
         }
     }
 }

@@ -34,9 +34,13 @@ public class ClientePedidoService {
     }
 
     public Integer obtenerUltimoPedidoId(){
-        Pedido pedido =  pedidoRepositorio.findTopByOrderByIdDesc();
-        Integer resultado = pedido.getId();
-        return resultado+1;
+        try{
+            Pedido pedido =  pedidoRepositorio.findTopByOrderByIdDesc();
+            Integer resultado = pedido.getId();
+            return resultado+1;
+        } catch (Exception e) {
+            return 1;
+        }
     }
 
 }

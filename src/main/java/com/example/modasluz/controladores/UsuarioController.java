@@ -17,20 +17,8 @@ public class UsuarioController {
 
 
     @GetMapping("/eliminar")
-    public Object eliminar(@RequestParam Integer id) {
-        try {
-            if (usuarioService.getByIdCliente(id) != null) {
-                if (usuarioService.getPedidosDeCliente(id).getPedidosDTO().isEmpty()) {
-                    usuarioService.eliminar(id);
-                    return "Cliente eliminado";
-                } else {
-                    return "No se puede eliminar el cliente porque tiene pedidos asociados";
-                }
-            }
-        } catch (Exception e) {
-            return "Error al eliminar el cliente";
-        }
-        return "No se ha encontrado un cliente con el id ingresado";
+    public String eliminar(@RequestParam Integer id) throws Exception{
+        return usuarioService.eliminar(id);
     }
 
 

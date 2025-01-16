@@ -13,7 +13,7 @@ public class PedidoByClienteController {
     private UsuarioService usuarioService;
 
     @GetMapping("")
-    public UsuarioDTOPedidos getPedidosCliente(@RequestParam Integer id) {
+    public UsuarioDTOPedidos getPedidosCliente(@RequestParam Integer id) throws Exception {
         return usuarioService.getPedidosDeCliente(id);
     }
 

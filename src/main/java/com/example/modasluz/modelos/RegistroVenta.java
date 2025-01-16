@@ -1,18 +1,11 @@
 package com.example.modasluz.modelos;
 
-import com.example.modasluz.repositorios.CatalogoRepositorio;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 
 @Entity
-@Table(name = "registro_venta", schema = "modasluz", catalog = "postgres")
+@Table(name = "registro_venta", schema = "modasluz")
 @Getter
 @Setter
 @ToString
@@ -41,8 +34,4 @@ public class RegistroVenta {
     @Column(name = "precio_venta", nullable = false)
     private Double precio_venta;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

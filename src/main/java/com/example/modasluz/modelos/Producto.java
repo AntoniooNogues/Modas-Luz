@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "producto", schema = "modasluz", catalog = "postgres")
+@Table(name = "producto", schema = "modasluz")
 @Getter
 @Setter
 @ToString
