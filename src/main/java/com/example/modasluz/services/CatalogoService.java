@@ -2,7 +2,7 @@ package com.example.modasluz.services;
 
 import com.example.modasluz.dto.CatalogoDTO;
 import com.example.modasluz.dto.CatalogoPersonalizadoDTO;
-import com.example.modasluz.mappers.CatalogoMapper;
+import com.example.modasluz.mappers.*;
 import com.example.modasluz.modelos.Catalogo;
 import com.example.modasluz.modelos.Producto;
 import com.example.modasluz.modelos.Talla;
@@ -13,17 +13,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class CatalogoService {
 
+    @Autowired
     private final TallaRepositorio tallaRepositorio;
-    private final ProductoService productoService;
-    private CatalogoRepositorio catalogoRepositorio;
 
     @Autowired
-    private CatalogoMapper catalogoMapper;
+    private final ProductoService productoService;
+
+    @Autowired
+    private final CatalogoRepositorio catalogoRepositorio;
+
+    @Autowired
+    private final CatalogoMapper catalogoMapper;
+
+    @Autowired
+    private final Mappers mappers;
+    
 
     public Catalogo guardar(CatalogoDTO dto) {
         return catalogoRepositorio.save(catalogoMapper.toEntity(dto));
@@ -42,7 +52,7 @@ public class CatalogoService {
         if (catalogo.isEmpty()) {
             throw new RuntimeException("No hay datos en el catalogo");
         }
-        return catalogoMapper.toDTO(catalogo);
+        return catalogo.stream().map(mappers::toDTO).collect(Collectors.toList());
     }
 
     public List<Catalogo> getAll() {
@@ -66,7 +76,7 @@ public class CatalogoService {
             }
             Catalogo catalogo = catalogoRepositorio.findByProductoIdAndTallaId(idProducto, talla.getId());
             if (catalogo.getCantidad()>0 ) {
-                return  catalogoMapper.toDTO(catalogo);
+                return  mappers.toDTO(catalogo);
             }
             else{
                 throw new Exception("El producto no se encuentra disponible en la talla seleccionada en el catalogo");
@@ -91,16 +101,20 @@ public class CatalogoService {
             Catalogo catalogo = catalogoRepositorio.findByProductoIdAndTallaId(catalogoPersonalizadoDTO.getId_producto(), talla.getId());
             if (catalogo != null){
                 catalogo.setCantidad(catalogoPersonalizadoDTO.getCantidad());
-                guardar(catalogo);
-                return catalogoMapper.toDTO(catalogo);
+                catalogoRepositorio.save(catalogo);
+                return mappers.toDTO(catalogo);
             }else{
                 throw new Exception("El producto no se encuentra en el catalogo");
             }
         } catch (Exception e) {
            if (e.getMessage().equals("El producto no se encuentra en el catalogo")){
                 throw e;
-           } else {
-               throw new Exception("La talla seleccionada no se encuentra en el catalogo");
+           }
+           if (e.getMessage().equals("La talla seleccionada no se encuentra en el catalogo")){
+                throw e;
+           }
+           else{
+                throw new Exception(e);
            }
         }
     }

@@ -14,18 +14,26 @@ import java.util.List;
 
 
 @Service
-@AllArgsConstructor
 public class PedidoService {
 
-    private final ProductoService productoService;
-    private final TipoPagoService tipoPagoService;
-   @Autowired
-    @Lazy
+    @Autowired
+    private ProductoService productoService;
+
+    @Autowired
+    private TipoPagoService tipoPagoService;
+
+    @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
     private RegistroVentaService registroVentaService;
+
+    @Autowired
     private PedidoRepositorio pedidoRepositorio;
+
     @Autowired
     private ClientePedidoService clientePedidoService;
+
     @Autowired
     private RegistroVentaRepositorio registroVentaRepositorio;
 

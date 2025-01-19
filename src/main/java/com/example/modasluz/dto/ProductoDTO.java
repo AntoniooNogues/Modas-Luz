@@ -15,4 +15,9 @@ public class ProductoDTO {
     private String descripcion;
     private String imagen;
 
+    public ProductoDTO(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+
+    }
 }

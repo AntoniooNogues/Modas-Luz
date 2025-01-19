@@ -2,8 +2,7 @@ package com.example.modasluz.modelos;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.HashSet;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "talla", schema = "modasluz")

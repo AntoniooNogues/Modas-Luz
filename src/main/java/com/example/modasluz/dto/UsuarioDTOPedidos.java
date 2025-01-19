@@ -1,4 +1,5 @@
 package com.example.modasluz.dto;
+import com.example.modasluz.modelos.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,12 @@ public class UsuarioDTOPedidos {
     private String dni;
     private String correo_electronico;
     private Set<PedidoDTO> pedidosDTO;
+
+    public UsuarioDTOPedidos(Usuario usuario, Set<PedidoDTO> pedidosDTO) {
+        this.nombre = usuario.getNombre();
+        this.apellidos = usuario.getApellidos();
+        this.dni = usuario.getDni();
+        this.correo_electronico = usuario.getCorreo_electronico();
+        this.pedidosDTO = pedidosDTO;
+    }
 }

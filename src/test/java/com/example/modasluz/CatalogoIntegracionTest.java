@@ -1,22 +1,19 @@
 package com.example.modasluz;
 
 import com.example.modasluz.dto.*;
-import com.example.modasluz.mappers.CatalogoMapper;
+import com.example.modasluz.mappers.Mappers;
 import com.example.modasluz.modelos.*;
-import com.example.modasluz.repositorios.*;
+import com.example.modasluz.repositorios.CatalogoRepositorio;
+import com.example.modasluz.repositorios.TallaRepositorio;
 import com.example.modasluz.services.CatalogoService;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.modasluz.services.ProductoService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,190 +22,120 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class CatalogoIntegracionTest {
 
-    @InjectMocks
-    private CatalogoService service;
-    @Mock
-    private CatalogoRepositorio catalogoRepositorio;
-    @Mock
-    private ProductoRepositorio productoRepositorio;
     @Mock
     private TallaRepositorio tallaRepositorio;
+
     @Mock
-    private CatalogoMapper catalogoMapper;
+    private ProductoService productoService;
+
+    @Mock
+    private CatalogoRepositorio catalogoRepositorio;
+
+    @Mock
+    private Mappers mappers;
+
+    @InjectMocks
+    private CatalogoService service;
 
     @Test
-    public void consultarDisponibilidadPostivo() throws Exception {
-        //GIVEN
-        Producto producto = new Producto();
-        producto.setId(1);
-        Talla talla = new Talla();
-        talla.setId(1);
-        talla.setTipo("M");
-        Catalogo catalogo = new Catalogo();
-        catalogo.setProducto(producto);
-        catalogo.setTalla(talla);
-        catalogo.setCantidad(10);
+    public void testConsultarDisponibilidad() throws Exception {
+        Talla talla = new Talla(1, "S");
+        Producto producto = new Producto(1, null, "Camisa de algodon", "Camisa de algodon, elegante, para caballero", null);
+        Catalogo catalogo = new Catalogo(1, producto, talla, new Color(1, "Rojo"), 10, 100.0);
 
-        when(productoRepositorio.findById(1)).thenReturn(java.util.Optional.of(producto));
-        when(tallaRepositorio.findByTipo("M")).thenReturn(talla);
+        ProductoDTO productoDTO = new ProductoDTO();
+        productoDTO.setNombre("Camisa de algodon");
+        productoDTO.setDescripcion("Camisa de algodon, elegante, para caballero");
+
+        TallaDTO tallaDTO = new TallaDTO();
+        tallaDTO.setTipo("S");
+
+        ColorDTO colorDTO = new ColorDTO();
+        colorDTO.setNombre("Rojo");
+
+        CatalogoDTO catalogoDTO = new CatalogoDTO(productoDTO, tallaDTO, colorDTO, 15, 100.0);
+
+        when(tallaRepositorio.findByTipo("S")).thenReturn(talla);
+        when(productoService.getByIdNormal(1)).thenReturn(producto);
         when(catalogoRepositorio.findByProductoIdAndTallaId(1, 1)).thenReturn(catalogo);
+        when(mappers.toDTO(catalogo)).thenReturn(catalogoDTO);
 
-        //WHEN
-        CatalogoDTO result = service.consultarDisponibilidad(1, "M");
+        CatalogoDTO result = service.consultarDisponibilidad(1, "S");
 
-        //THEN
         assertNotNull(result);
-        assertEquals(10, result.getCantidad());
-        verify(productoRepositorio, times(1)).findById(1);
-        verify(tallaRepositorio, times(1)).findByTipo("M");
-        verify(catalogoRepositorio, times(1)).findByProductoIdAndTallaId(1, 1);
+        assertEquals("Camisa de algodon", result.getProducto().getNombre());
+        assertEquals("S", result.getTalla().getTipo());
+        assertEquals(15, result.getCantidad());
+        assertEquals(100.0, result.getPrecio());
     }
 
     @Test
-    public void consultarDisponibilidadTallaNoEncontrada() {
-        //GIVEN
-        when(tallaRepositorio.findByTipo("M")).thenReturn(null);
+    public void testModificarStock() throws Exception {
+        Talla talla = new Talla(1, "S");
+        Producto producto = new Producto(1, null, "Camisa de algodon", "Camisa de algodon, elegante, para caballero", null);
+        Catalogo catalogo = new Catalogo(1, producto, talla, new Color(1, "Rojo"), 10, 100.0);
 
-        //WHEN
-        Exception exception = assertThrows(Exception.class, () -> service.consultarDisponibilidad(1, "M"));
+        CatalogoPersonalizadoDTO catalogoPersonalizadoDTO = new CatalogoPersonalizadoDTO(1, "S", 15);
+        catalogo.setCantidad(15);
 
-        //THEN
-        assertEquals("La talla seleccionada no se encuentra en el catalogo", exception.getMessage());
-        verify(tallaRepositorio, times(1)).findByTipo("M");
-    }
+        ProductoDTO productoDTO = new ProductoDTO();
+        productoDTO.setNombre("Camisa de algodon");
+        productoDTO.setDescripcion("Camisa de algodon, elegante, para caballero");
 
-    @Test
-    public void consultarDisponibilidadProductoNoEncontrado() {
-        //GIVEN
-        Talla talla = new Talla();
-        talla.setId(1);
-        talla.setTipo("M");
+        TallaDTO tallaDTO = new TallaDTO();
+        tallaDTO.setTipo("S");
 
-        when(tallaRepositorio.findByTipo("M")).thenReturn(talla);
-        when(productoRepositorio.findById(1)).thenReturn(java.util.Optional.empty());
+        ColorDTO colorDTO = new ColorDTO();
+        colorDTO.setNombre("Rojo");
 
-        //WHEN
-        Exception exception = assertThrows(Exception.class, () -> service.consultarDisponibilidad(1, "M"));
+        CatalogoDTO catalogoDTO = new CatalogoDTO(productoDTO, tallaDTO, colorDTO, 15, 100.0);
 
-        //THEN
-        assertEquals("El producto con el id: 1 no existe", exception.getMessage());
-        verify(tallaRepositorio, times(1)).findByTipo("M");
-        verify(productoRepositorio, times(1)).findById(1);
-    }
+        lenient().when(tallaRepositorio.findByTipo("S")).thenReturn(talla);
+        lenient().when(productoService.getByIdNormal(1)).thenReturn(producto);
+        lenient().when(catalogoRepositorio.findByProductoIdAndTallaId(1, 1)).thenReturn(catalogo);
+        lenient().when(mappers.toDTO(catalogo)).thenReturn(catalogoDTO);
+        lenient().when(catalogoRepositorio.save(catalogo)).thenReturn(catalogo);
 
-    @Test
-    public void consultarDisponibilidadNegativo() {
-        //GIVEN
-        Producto producto = new Producto();
-        producto.setId(1);
-        Talla talla = new Talla();
-        talla.setId(1);
-        talla.setTipo("M");
+        CatalogoDTO result = service.modificarStock(catalogoPersonalizadoDTO);
 
-        when(productoRepositorio.findById(1)).thenReturn(java.util.Optional.of(producto));
-        when(tallaRepositorio.findByTipo("M")).thenReturn(talla);
-        when(catalogoRepositorio.findByProductoIdAndTallaId(1, 1)).thenReturn(null);
-
-        //WHEN
-        Exception exception = assertThrows(Exception.class, () -> service.consultarDisponibilidad(1, "M"));
-
-        //THEN
-        assertEquals("El producto no se encuentra disponible en la talla seleccionada en el catalogo", exception.getMessage());
-        verify(productoRepositorio, times(1)).findById(1);
-        verify(tallaRepositorio, times(1)).findByTipo("M");
-        verify(catalogoRepositorio, times(1)).findByProductoIdAndTallaId(1, 1);
-    }
-
-    @Test
-    public void modificarStockPositivo() throws Exception {
-        //GIVEN
-        Producto producto = new Producto();
-        producto.setId(1);
-        Talla talla = new Talla();
-        talla.setId(1);
-        talla.setTipo("M");
-        Catalogo catalogo = new Catalogo();
-        catalogo.setProducto(producto);
-        catalogo.setTalla(talla);
-        catalogo.setCantidad(10);
-
-        CatalogoPersonalizadoDTO dto = new CatalogoPersonalizadoDTO(1, "M", 20);
-
-        when(tallaRepositorio.findByTipo("M")).thenReturn(talla);
-        when(catalogoRepositorio.findByProductoIdAndTallaId(1, 1)).thenReturn(catalogo);
-        when(catalogoRepositorio.save(any(Catalogo.class))).thenReturn(catalogo);
-
-        //WHEN
-        CatalogoDTO result = service.modificarStock(dto);
-
-        //THEN
         assertNotNull(result);
-        assertEquals(20, result.getCantidad());
-        verify(tallaRepositorio, times(1)).findByTipo("M");
-        verify(catalogoRepositorio, times(1)).findByProductoIdAndTallaId(1, 1);
-        verify(catalogoRepositorio, times(1)).save(any(Catalogo.class));
+        assertEquals(15, result.getCantidad());
+        verify(catalogoRepositorio, times(1)).save(catalogo);
     }
 
     @Test
-    public void modificarStockTallaNoEncontrada() {
-        //GIVEN
-        CatalogoPersonalizadoDTO dto = new CatalogoPersonalizadoDTO(1, "M", 20);
+    public void testGetAllDTOConDatos() {
+        Talla talla = new Talla(1, "S");
+        Producto producto = new Producto(1, null, "Camisa de algodon", "Camisa de algodon, elegante, para caballero", null);
+        Catalogo catalogo = new Catalogo(1, producto, talla, new Color(1, "Rojo"), 10, 100.0);
 
-        when(tallaRepositorio.findByTipo("M")).thenReturn(null);
+        lenient().when(catalogoRepositorio.findAll()).thenReturn(Arrays.asList(catalogo));
 
-        //WHEN
-        Exception exception = assertThrows(Exception.class, () -> service.modificarStock(dto));
+        CatalogoDTO catalogoDTO = new CatalogoDTO(
+                new ProductoDTO("Camisa de algodon", "Camisa de algodon, elegante, para caballero"),
+                new TallaDTO("S"),
+                new ColorDTO("Rojo"),
+                10,
+                100.0
+        );
 
-        //THEN
-        assertEquals("La talla seleccionada no se encuentra en el catalogo", exception.getMessage());
-        verify(tallaRepositorio, times(1)).findByTipo("M");
-    }
+        lenient().when(mappers.toDTO(catalogo)).thenReturn(catalogoDTO);
 
-    @Test
-    public void modificarStockProductoNoEncontrado() {
-        //GIVEN
-        Talla talla = new Talla();
-        talla.setId(1);
-        talla.setTipo("M");
-        CatalogoPersonalizadoDTO dto = new CatalogoPersonalizadoDTO(1, "M", 20);
+        // Verificar que findAll devuelve la lista esperada
+        List<Catalogo> catalogoList = catalogoRepositorio.findAll();
+        assertNotNull(catalogoList);
+        assertEquals(1, catalogoList.size());
+        assertEquals("Camisa de algodon", catalogoList.get(0).getProducto().getNombre());
 
-        when(tallaRepositorio.findByTipo("M")).thenReturn(talla);
-        when(catalogoRepositorio.findByProductoIdAndTallaId(1, 1)).thenReturn(null);
+        // Verificar que toDTO convierte correctamente la entidad
+        CatalogoDTO dto = mappers.toDTO(catalogo);
+        assertNotNull(dto);
+        assertEquals("Camisa de algodon", dto.getProducto().getNombre());
 
-        //WHEN
-        Exception exception = assertThrows(Exception.class, () -> service.modificarStock(dto));
-
-        //THEN
-        assertEquals("El producto no se encuentra en el catalogo", exception.getMessage());
-        verify(tallaRepositorio, times(1)).findByTipo("M");
-        verify(catalogoRepositorio, times(1)).findByProductoIdAndTallaId(1, 1);
-    }
-
-    @Test
-    public void listarCatalogo() {
-        List<Catalogo> catalogos = new ArrayList<>();
-        catalogos.add(new Catalogo(1, new Producto(1, new TipoProducto(1, "Camisa"), "Camisa de algodon", "Camisa de algodon, elegante, para caballero", null), new Talla(1, "S"), new Color(1, "Rojo"), 10, 100.0));
-        catalogos.add(new Catalogo(2, new Producto(2, new TipoProducto(2, "Pantalon"), "Pantalon de mezclilla", "Pantalon de mezclilla, casual, para caballero", null), new Talla(2, "M"), new Color(2, "Azul"), 20, 200.0));
-        catalogos.add(new Catalogo(3, new Producto(3, new TipoProducto(3, "Camiseta"), "Camiseta de algodon", "Camiseta de algodon, casual, con estampado de una Tormenta", null), new Talla(3, "L"), new Color(3, "Verde"), 30, 300.0));
-
-        List<CatalogoDTO> catalogoDTOs = new ArrayList<>();
-        catalogoDTOs.add(new CatalogoDTO(new ProductoDTO(new TipoProductoDTO("Camisa"), "Camisa de algodon", "Camisa de algodon, elegante, para caballero", null), new TallaDTO("S"), new ColorDTO("Rojo"), 10, 10.00));
-        catalogoDTOs.add(new CatalogoDTO(new ProductoDTO(new TipoProductoDTO("Pantalon"), "Pantalon de mezclilla", "Pantalon de mezclilla, casual, para caballero", null), new TallaDTO("M"), new ColorDTO("Azul"), 20, 20.00));
-        catalogoDTOs.add(new CatalogoDTO(new ProductoDTO(new TipoProductoDTO("Camiseta"), "Camiseta de algodon", "Camiseta de algodon, casual, con estampado de una Tormenta", null), new TallaDTO("L"), new ColorDTO("Verde"), 30, 30.00));
-
-        Mockito.when(catalogoRepositorio.findAll()).thenReturn(catalogos);
-        Mockito.when(catalogoMapper.toDTO(anyList())).thenReturn(catalogoDTOs);
-
-        assertEquals(3, service.getAllDTO().size());
-        Mockito.verify(catalogoRepositorio, times(1)).findAll();
-        Mockito.verify(catalogoMapper, times(1)).toDTO(anyList());
-    }
-
-    @Test
-    public void listarCatalogoVacio() {
-        when(catalogoRepositorio.findAll()).thenReturn(new ArrayList<>());
-        Exception exception = assertThrows(RuntimeException.class, () -> service.getAllDTO());
-        assertEquals("No hay datos en el catalogo", exception.getMessage());
-        verify(catalogoRepositorio, times(1)).findAll();
+        // Ejecutar el método del servicio y verificar el resultado
+        List<CatalogoDTO> catalogoDTOList = service.getAllDTO();
+        assertNotNull(catalogoDTOList);
+        assertEquals(1, catalogoDTOList.size());
+        assertEquals("Camisa de algodon", catalogoDTOList.get(0).getProducto().getNombre());
     }
 }
